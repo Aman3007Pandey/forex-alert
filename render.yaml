@@ -1,0 +1,15 @@
+services:
+  - type: worker
+    name: forex-alert-worker
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python forexAlert.py
+    envVars:
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: TWELVE_API_KEY
+        sync: false
