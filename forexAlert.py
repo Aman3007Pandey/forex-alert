@@ -54,6 +54,7 @@ def scheduled_get_all():
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
     # Run every hour at minute 0
+    scheduled_get_all()
     scheduler.add_job(scheduled_get_all, 'cron', minute=0)
     print("Scheduler started. Press Ctrl+C to exit.")
     try:
