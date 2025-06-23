@@ -16,9 +16,7 @@ def send_gmail(body):
     content["From"]=sender_gmail
     content["To"]=receiver_gmail
     if isinstance(body, list):
-        body = "\n".join(body)
-    if len(body)==0:
-        body="DAMN THE API !!!"    
+        body = "\n".join(body) 
     content.set_content(body)
 
 
