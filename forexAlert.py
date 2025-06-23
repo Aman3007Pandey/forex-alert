@@ -3,6 +3,8 @@ from gmail import send_gmail
 from config import CURRENCY_PAIRS
 from models import CurrencyPair
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+import time
 
 app=FastAPI()
 
@@ -19,10 +21,14 @@ def scheduled_get_all():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(scheduled_get_all, 'interval', hours=1)
+scheduler.add_job(
+    scheduled_get_all,
+    CronTrigger(minute=30, hour='8-23')  # 8:30, 9:30, ..., 23:30
+)
 # scheduler.add_job(scheduled_get_all, 'interval', seconds=10)
 scheduler.start()
 scheduled_get_all()
+
 @app.get("/check")
 def check(symbol:str="EUR/USD"):
     pair=CURRENCY_PAIRS.get(symbol)
@@ -48,8 +54,11 @@ def get_all():
     return {"results": results}
 
     
-
-
-
-
+if __name__ == "__main__":
+    
+    try:
+        while True:
+            time.sleep(58)
+    except (KeyboardInterrupt, SystemExit):
+        scheduler.shutdown()
 

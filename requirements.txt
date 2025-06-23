@@ -3,3 +3,4 @@ uvicorn
 apscheduler
 requests
 python-dotenv
+smtplib
