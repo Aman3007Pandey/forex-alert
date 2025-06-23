@@ -27,7 +27,9 @@ def scheduled_get_all():
             pair = CURRENCY_PAIRS[symbol]
             price = price_map.get(symbol)
             if price:
-                results.append(pair.check_and_alert(price))
+                x=pair.check_and_alert(price)
+                results.append(x)
+                print(x)
 
         # Sleep unless it's the last batch
         if i + batch_size < len(symbols):
