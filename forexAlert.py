@@ -2,21 +2,41 @@ from config import CURRENCY_PAIRS
 from models import CurrencyPair
 from apscheduler.schedulers.blocking import BlockingScheduler
 from gmail import send_gmail
+import time
 
 
 # app=FastAPI()
 
+import time
+
 def scheduled_get_all():
     symbols = list(CURRENCY_PAIRS.keys())
-    price_map = CurrencyPair.fetch_price_all(symbols)
-    print("data fetched from twelvedata API")
+    batch_size = 4
+    wait_time_seconds = 120  # 2 minutes
+
     results = []
-    for symbol, pair in CURRENCY_PAIRS.items():
-        price = price_map.get(symbol)
-        if price:
-            results.append(pair.check_and_alert(price))
+
+    for i in range(0, len(symbols), batch_size):
+        batch_symbols = symbols[i:i + batch_size]
+
+        # Fetch and process this batch
+        print(f"📦 Fetching batch {i // batch_size + 1}: {batch_symbols}")
+        price_map = CurrencyPair.fetch_price_all(batch_symbols)
+
+        for symbol in batch_symbols:
+            pair = CURRENCY_PAIRS[symbol]
+            price = price_map.get(symbol)
+            if price:
+                results.append(pair.check_and_alert(price))
+
+        # Sleep unless it's the last batch
+        if i + batch_size < len(symbols):
+            print(f"⏳ Waiting {wait_time_seconds // 60} minutes before next batch...")
+            time.sleep(wait_time_seconds)
+
     send_gmail(results)
-    return {" [SCHEDULED] results": results}
+    return {f"[SCHEDULED] results": results}
+
 
 
 # scheduler = BackgroundScheduler()
@@ -57,7 +77,6 @@ def scheduled_get_all():
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
     # Run every hour at minute 0
-    scheduled_get_all()
     scheduler.add_job(scheduled_get_all, 'cron', minute=0)
     print("Scheduler started. Press Ctrl+C to exit.")
     try:

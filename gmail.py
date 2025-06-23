@@ -10,13 +10,15 @@ receiver_gmail=os.getenv("receiver_gmail")
 
 def send_gmail(body):
     print("email reached")
-    subject="FOREX ALERT"
+    subject="NEW FOREX ALERT"
     content=EmailMessage()
     content['Subject']=subject
     content["From"]=sender_gmail
     content["To"]=receiver_gmail
     if isinstance(body, list):
         body = "\n".join(body)
+    if len(body)==0:
+        body="DAMN THE API !!!"    
     content.set_content(body)
 
 
