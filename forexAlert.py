@@ -75,12 +75,11 @@ def scheduled_get_all():
     
 
 if __name__ == "__main__":
-    scheduler = BlockingScheduler()
     # Run every hour at minute 0
     # scheduler.add_job(scheduled_get_all, 'cron', minute=0)
     # print("Scheduler started. Press Ctrl+C to exit.")
     try:
-        scheduler.start()
+        scheduled_get_all()
     except (KeyboardInterrupt, SystemExit):
         print("Scheduler stopped.")
 
