@@ -18,6 +18,7 @@ class CurrencyPair:
         return float(res['price']) if 'price' in res else None
     
     def fetch_price_all(symbols: list[str]) -> dict:
+        print("fetching pirce from twelveDATA API")
         joined = ",".join(symbols)
         url = f"https://api.twelvedata.com/price?symbol={joined}&apikey={API_KEY}"
         res = requests.get(url).json()
@@ -30,27 +31,29 @@ class CurrencyPair:
                 result[symbol] = None
         return result
 
-    def check_and_alert(self) -> dict:
-        price = self.fetch_price()
-        if price is None:
-            return {"symbol": self.symbol, "status": "error", "message": "Failed to fetch price"}
+    # def check_and_alert(self) -> dict:
+    #     price = self.fetch_price()
+    #     if price is None:
+    #         return {"symbol": self.symbol, "status": "error", "message": "Failed to fetch price"}
 
-        if self.lower <= price <= self.upper:
-            subject = f"💱 Alert: {self.symbol} at {price}"
-            body = f"{self.symbol} is within your alert range ({self.lower}–{self.upper})"
-            send_gmail(subject, body)
-            return {"symbol": self.symbol, "status": "alert_sent", "price": price}
-        else:
-            return {"symbol": self.symbol, "status": "no_alert", "price": price}
+    #     if self.lower <= price <= self.upper:
+    #         subject = f"💱 Alert: {self.symbol} at {price}"
+    #         body = f"{self.symbol} is within your alert range ({self.lower}–{self.upper})"
+    #         send_gmail(subject, body)
+    #         return {"symbol": self.symbol, "status": "alert_sent", "price": price}
+    #     else:
+    #         return {"symbol": self.symbol, "status": "no_alert", "price": price}
 
     def check_and_alert(self,price) -> dict:
+        print("reached check & Alert")
         if price is None:
+            print("PRICE IS COMING TO BE NONE")
             return {"symbol": self.symbol, "status": "error", "message": "Failed to fetch price"}
-
+        subject = f"💱 Alert: {self.symbol} at {price}"
         if self.lower <= price <= self.upper:
-            subject = f"💱 Alert: {self.symbol} at {price}"
-            body = f"{self.symbol} is within your alert range ({self.lower}–{self.upper})"
-            send_gmail(subject, body)
-            return {"symbol": self.symbol, "status": "alert_sent", "price": price}
+            
+            body = f"✅ {self.symbol} is within your alert range ({self.lower}–{self.upper})"
+            body
         else:
-            return {"symbol": self.symbol, "status": "no_alert", "price": price}
+            body = f"❌ {self.symbol} is outside your alert range ({self.lower}–{self.upper})"
+            return body

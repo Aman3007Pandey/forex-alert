@@ -8,11 +8,15 @@ sender_gmail=os.getenv("sender_gmail")
 sender_app_password=os.getenv("sender_app_password")
 receiver_gmail=os.getenv("receiver_gmail")
 
-def send_gmail(subject,body):
+def send_gmail(body):
+    print("email reached")
+    subject="FOREX ALERT"
     content=EmailMessage()
     content['Subject']=subject
     content["From"]=sender_gmail
     content["To"]=receiver_gmail
+    if isinstance(body, list):
+        body = "\n".join(body)
     content.set_content(body)
 
 

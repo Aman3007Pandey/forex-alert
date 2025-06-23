@@ -1,18 +1,21 @@
 from config import CURRENCY_PAIRS
 from models import CurrencyPair
 from apscheduler.schedulers.blocking import BlockingScheduler
+from gmail import send_gmail
+
 
 # app=FastAPI()
 
 def scheduled_get_all():
     symbols = list(CURRENCY_PAIRS.keys())
     price_map = CurrencyPair.fetch_price_all(symbols)
+    print("data fetched from twelvedata API")
     results = []
     for symbol, pair in CURRENCY_PAIRS.items():
         price = price_map.get(symbol)
         if price:
             results.append(pair.check_and_alert(price))
-
+    send_gmail(results)
     return {" [SCHEDULED] results": results}
 
 
