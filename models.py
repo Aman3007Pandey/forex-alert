@@ -48,12 +48,12 @@ class CurrencyPair:
         print("reached check & Alert")
         if price is None:
             print("PRICE IS COMING TO BE NONE")
-            return {"symbol": self.symbol, "status": "error", "message": "Failed to fetch price"}
-        subject = f"💱 Alert: {self.symbol} at {price}"
+            return f"symbol : ${self.symbol}, status :ERROR"
+        
         if self.lower <= price <= self.upper:
             
             body = f"✅ {self.symbol} is within your alert range ({self.lower}–{self.upper})"
-            body
+            return body
         else:
             body = f"❌ {self.symbol} is outside your alert range ({self.lower}–{self.upper})"
             return body

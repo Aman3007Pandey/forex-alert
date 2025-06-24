@@ -1,8 +1,8 @@
 name: Forex Alert Runner
 
 on:
-  schedule:
-    - cron: '0 * * * *'  # Every hour UTC
+  # schedule:
+  #   - cron: '0 * * * *'  # Every hour UTC
   workflow_dispatch:
 
 jobs:
