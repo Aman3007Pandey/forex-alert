@@ -10,7 +10,7 @@ CURRENCY_PAIRS = {
     "EUR/GBP": CurrencyPair("EUR/GBP", 1.2500, 1.2600),
     "EUR/CHF": CurrencyPair("EUR/CHF", 0.92800, 0.93200),
     "EUR/JPY": CurrencyPair("EUR/JPY", 1.2500, 1.2600),
-    "GBP/JPY": CurrencyPair("GBP/JPY", 1.2500, 1.2600),
+    "GBP/JPY": CurrencyPair("GBP/JPY", 198.918, 199.765),
     "EUR/CAD": CurrencyPair("EUR/CAD", 1.2500, 1.2600),
     "USD/CHF": CurrencyPair("USD/CHF", 1.2500, 1.2600),
     "USD/JPY": CurrencyPair("USD/JPY", 1.2500, 1.2600)
