@@ -52,8 +52,8 @@ class CurrencyPair:
         
         if self.lower <= price <= self.upper:
             
-            body = f"✅ {self.symbol} is within your alert range ({self.lower}–{self.upper})"
+            body = f"✅ {self.symbol} is within your alert range ({self.lower}–{self.upper}) ,Current Price :{price}"
             return body
         else:
-            body = f"❌ {self.symbol} is outside your alert range ({self.lower}–{self.upper})"
+            body = f"❌ {self.symbol} is outside your alert range ({self.lower}–{self.upper} ,Current Price :{price})"
             return body
