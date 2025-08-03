@@ -1,5 +1,5 @@
 from models import CurrencyPair
-
+from models import CurrencyPair_V2
 CURRENCY_PAIRS = {
    
     "AUD/USD": CurrencyPair("AUD/USD", 0.65340, 0.65475),
@@ -14,4 +14,11 @@ CURRENCY_PAIRS = {
     "EUR/CAD": CurrencyPair("EUR/CAD", 1.2500, 1.2600),
     "USD/CHF": CurrencyPair("USD/CHF", 1.2500, 1.2600),
     "USD/JPY": CurrencyPair("USD/JPY", 1.2500, 1.2600)
+}
+
+CURRENCY_PAIRS_V2 = {
+    "USD/CAD": CurrencyPair_V2("USD/CAD",[[1.38036,1.38378],[1.35922,1.36264]]),
+    "GBP/USD": CurrencyPair_V2("GBP/USD", [[1.35249, 1.35983],[1.33508,1.34093],[1.31174,1.31708],[1.27865,1.28399]]),
+    "USD/JPY": CurrencyPair_V2("USD/JPY", [[150.119,150.939],[141.759,142.579],[136.363,137.182],[156.090,156.910]]),
+    "CAD/JPY": CurrencyPair_V2("CAD/JPY", [[108.828,109.573],[105.398,105.856],[104.082,104.363],[102.051,102.798]])
 }

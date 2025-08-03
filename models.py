@@ -56,4 +56,42 @@ class CurrencyPair:
             return body
         else:
             body = f"❌ {self.symbol} is outside your alert range ({self.lower}–{self.upper} ,Current Price :{price})"
-            return body
+            return body  
+        
+
+class CurrencyPair_V2:
+    def __init__(self, symbol: str, bounds: list[list[float]]):
+        self.symbol = symbol
+        self.bounds=bounds
+
+    def fetch_price(self) -> float | None:
+        url = f"https://api.twelvedata.com/price?symbol={self.symbol}&apikey={API_KEY}"
+        res = requests.get(url).json()
+        return float(res['price']) if 'price' in res else None
+    
+    def fetch_price_all(symbols: list[str]) -> dict:
+        print("fetching pirce from twelveDATA API")
+        joined = ",".join(symbols)
+        url = f"https://api.twelvedata.com/price?symbol={joined}&apikey={API_KEY}"
+        res = requests.get(url).json()
+
+        result = {}
+        for symbol, data in res.items():
+            try:
+                result[symbol] = float(data["price"])
+            except:
+                result[symbol] = None
+        return result
+
+    def check_and_alert_V2(self, price: float) -> str:
+
+        nearest_pips_count=1000
+        for lower, upper in self.bounds:
+            if lower <= price <= upper:
+                return f"✅ {self.symbol} is within your alert range ({lower}–{upper}) , Current Price: {price}"
+            else:
+                nearest_pips_count=min(nearest_pips_count,min(abs(lower-price),abs(upper-price))) 
+        
+        rounded_value = round(nearest_pips_count, 5)
+        # If none matched
+        return f"❌ {self.symbol} is outside your alert ranges ., Current Price: {price}, Nearest PIPs Count : {rounded_value}"         

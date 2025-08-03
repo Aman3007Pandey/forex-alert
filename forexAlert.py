@@ -1,5 +1,5 @@
-from config import CURRENCY_PAIRS
-from models import CurrencyPair
+from config import CURRENCY_PAIRS,CURRENCY_PAIRS_V2
+from models import CurrencyPair,CurrencyPair_V2
 from apscheduler.schedulers.blocking import BlockingScheduler
 from gmail import send_gmail
 import time
@@ -40,6 +40,35 @@ def scheduled_get_all():
     return {f"[SCHEDULED] results": results}
 
 
+def scheduled_get_all_v2():
+    symbols = list(CURRENCY_PAIRS_V2.keys())
+    batch_size = 4
+    wait_time_seconds = 90  # 90 seconds
+
+    results = []
+
+    for i in range(0, len(symbols), batch_size):
+        batch_symbols = symbols[i:i + batch_size]
+
+        # Fetch and process this batch
+        print(f"📦 Fetching batch {i // batch_size + 1}: {batch_symbols}")
+        price_map = CurrencyPair_V2.fetch_price_all(batch_symbols)
+
+        for symbol in batch_symbols:
+            pair = CURRENCY_PAIRS_V2[symbol]
+            price = price_map.get(symbol)
+            if price:
+                x=pair.check_and_alert_V2(price)
+                results.append(x)
+                print(x)
+
+        # Sleep unless it's the last batch
+        if i + batch_size < len(symbols):
+            print(f"⏳ Waiting {wait_time_seconds // 60} minutes before next batch...")
+            time.sleep(wait_time_seconds)
+
+    send_gmail(results)
+    return {f"[SCHEDULED] results": results}
 
 # scheduler = BackgroundScheduler()
 # scheduler.add_job(
@@ -81,7 +110,7 @@ if __name__ == "__main__":
     # scheduler.add_job(scheduled_get_all, 'cron', minute=0)
     # print("Scheduler started. Press Ctrl+C to exit.")
     try:
-        scheduled_get_all()
+        scheduled_get_all_v2()
     except (KeyboardInterrupt, SystemExit):
         print("Scheduler stopped.")
 
